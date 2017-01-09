@@ -1,0 +1,42 @@
+{% extends "layout.html.twig" %}
+{% block body %}
+    <div class="row">
+      {% for folder in folders %}
+    <div class='col-md-3'>
+        <table style='margin-top: 10%;' class='table table-bordered table-responsive table-striped'>
+            <tr>
+                <thead>
+                    <td>
+                            <i class='glyphicon glyphicon-certificate'></i> <span>{{ folder }}</span>
+                            <input id="{{ folder }}" value="Deploy" type='button' class='btn btn-success btn-xs pull-right deploy'>
+                            <div id="liste" class="well {{ folder }}" style="display: none; word-break: break-all"></div>
+                    </td>
+                </thead>
+            </tr>
+        </table>
+    </div>
+{% endfor %}
+    </div>
+    <script>
+
+        $(".deploy").click(function () {
+            var folderName = $(this).attr("id");
+            $.ajax({
+                type: "GET",
+                url: "/ajax",
+                data:{a:folderName},
+                success: function (gelenveri) {
+                    var string = '<ul>';
+                    for(var i = 0; i < gelenveri.length; i++){
+                        string += '<li>'+gelenveri[i]+'</li>';
+                    }
+                    string += '</ul>';
+
+                    $("."+folderName).toggle(600).html(string);
+                }
+            });
+        });
+
+    </script>
+{% endblock %}
+
